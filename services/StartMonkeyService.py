@@ -3,12 +3,23 @@
 import os
 import threading
 
-#����Ʒ��˿ռ�ѵ���
+import platform
+
+#
 class StartMonkeyService(threading.Thread):
     def __init__(self):
         threading.Thread.__init__(self)
 
     def run(self):
         cmd = 'monkeyrunner ' + os.getcwd()
-        cmd = cmd + '\\..\\services\\MonkeyGetBitmapService.py'
+
+        sysstr = platform.system()
+        if (sysstr == "Windows"):
+            cmd = cmd + '\\..\\services\\MonkeyGetBitmapService.py'
+        elif (sysstr == "Linux" or sysstr == "Darwin"):
+            cmd = cmd + '/../services/MonkeyGetBitmapService.py'
+        else:
+            print ("不支持的操作系统!!!!!")
+
+        print cmd
         os.system(cmd)

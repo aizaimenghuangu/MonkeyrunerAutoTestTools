@@ -28,7 +28,7 @@ class ShowScreenService(threading.Thread):
         def run(self):
             self.clo = 1
            
-            file = open('D:\\screenshot\\info.txt','r')
+            file = open('C:\\screenshot\\info.txt','r')
             name = file.readline()
             width = file.readline()
             height = file.readline()
@@ -37,14 +37,14 @@ class ShowScreenService(threading.Thread):
             info = name + "width:" + width + "height:" + height
             self.panel2Txt1.SetValue(info)
             while self.clo == 1:
-                self.file = open('D:\\screenshot\\ctrl.txt','r')
+                self.file = open('C:\\screenshot\\ctrl.txt','r')
                 try:
                     self.ctrl = int(self.file.read())
                     self.file.close()
                 except:
                     print 'ctrl file is empty'          
                 if (self.ctrl == 1):
-                    self.img = wx.Image('D:\screenshot\monkeyPic.png'.decode('utf-8'),wx.BITMAP_TYPE_PNG,-1)
+                    self.img = wx.Image('C:\screenshot\monkeyPic.png'.decode('utf-8'),wx.BITMAP_TYPE_PNG,-1)
                     self.height = self.img.GetHeight()
                     self.width = self.img.GetWidth()
                     self.img.Rescale(self.getPerfectWith(self.width, self.height),self.getPerfectHeight(self.width, self.height))
@@ -60,6 +60,11 @@ class ShowScreenService(threading.Thread):
 
         #转换手机屏幕尺寸，以适应屏幕的显示
         def getPerfectWith(self,width,height):
+
+            #TODO:机顶盒屏幕配置的临时方案，让界面显示更大些
+            self.screenRate.setScreenRate(1.0/2.0)
+            return width*1/2
+
             if 360 < width and width <= 480:
                 self.screenRate.setScreenRate(3.0/4.0)
                 return width*3/4
@@ -81,6 +86,11 @@ class ShowScreenService(threading.Thread):
     
         #转换手机屏幕尺寸，以适应屏幕的显示
         def getPerfectHeight(self,width,height):
+            
+            #TODO:机顶盒屏幕配置的临时方案，让界面显示更大些
+            self.screenRate.setScreenRate(1.0/2.0)
+            return height*1/2
+
             if 360 < width and width <= 480:
                 self.screenRate.setScreenRate(3.0/4.0)
                 return height*3/4

@@ -1,13 +1,26 @@
 #coding:utf-8
 import os, sys
 import subprocess
+import platform
 
 curPath = os.path.abspath(os.path.dirname(__file__))
-sys.path.append(curPath)
-sys.path.append(curPath + '\\..')
-sys.path.append(curPath + '\\..\\widget')
-sys.path.append(curPath + '\\..\\services')
-sys.path.append(curPath + '\\..\\util')
+
+sysstr = platform.system()
+
+if (sysstr == "Windows"):
+    sys.path.append(curPath)
+    sys.path.append(curPath + '\\..')
+    sys.path.append(curPath + '\\..\\widget')
+    sys.path.append(curPath + '\\..\\services')
+    sys.path.append(curPath + '\\..\\util')
+elif (sysstr == "Linux" or sysstr == "Darwin"):
+    sys.path.append(curPath)
+    sys.path.append(curPath + '/..')
+    sys.path.append(curPath + '/../widget')
+    sys.path.append(curPath + '/../services')
+    sys.path.append(curPath + '/../util')
+else:
+    print ("不支持的操作系统!!!!!")
 
 from wx import Size
 import wx
@@ -20,17 +33,18 @@ from widget import  TabPage
 
 
 
-class MyClass(object):
+class MonkeyrunnerTools(object):
 
     def __init__(self, params):
         #定义窗体尺寸
-        self.winSize = wx.Size(900,730)
+        #self.winSize = wx.Size(900,730)
+        self.winSize = wx.Size(1280,720)
         #刷新率默认为0.05秒每次
         self.freshRate = 0.05
         #动态显示手机屏幕的线程
         self.connectThread = None
         #截图保存路径
-        self.picPath = 'D:\screenshot'
+        self.picPath = 'C:\\screenshot'
         #定义屏幕操作的类型，0表示点击，1表示滑动，2表示左右滑动，3表示上下滑动，4表示长按
         self.eventType = 0
         #定义录制脚本的类型，0表示monkeyrunner脚本，1表示DOS脚本
@@ -69,22 +83,23 @@ device = MonkeyRunner.waitForConnection()\n\n'''
     #显示主窗体
     def show(self):
         win = wx.App()
-        self.frame = wx.Frame(None, -1, 'simple.py',size = self.winSize) 
+        self.frame = wx.Frame(None, -1, u'视易Android机顶盒录制工具',size = self.winSize)
         nb = wx.Notebook(self.frame,wx.NewId())    
         menuBar = wx.MenuBar()
-        
+
         #添加tab标签页
-        page1 = TabPage.TabPage(nb)
-        page2 = TabPage.TabPage(nb)
-        nb.AddPage(page1,u'录制脚本')
-        self.addPage1Layout(self.frame, page1);
+        recordPage = TabPage.TabPage(nb)
+        playbackPage = TabPage.TabPage(nb)
+        nb.AddPage(recordPage,u'录制脚本')
+        self.addPage1Layout(self.frame, recordPage);
         
-        nb.AddPage(page2,u'脚本回放')                   
+        nb.AddPage(playbackPage,u'脚本回放')
         self.addMenu(menuBar,self.frame);
         
         self.frame.SetMenuBar(menuBar);
         self.frame.Bind(wx.EVT_CLOSE,self.closeWinEVT)
         self.frame.Show()
+        # self.frame.ShowFullScreen(True, style=wx.FULLSCREEN_ALL)
         win.MainLoop()
       
     #添加菜单项  
@@ -132,14 +147,15 @@ device = MonkeyRunner.waitForConnection()\n\n'''
         menuBar.Append(menuControl,u"控制")
         menuBar.Append(menuAbout,u"关于")
     
-    #录制脚本页面页面布局
+    #录制脚本页面布局
     def addPage1Layout(self,frame,page1):
         page1BoxSizer = wx.BoxSizer(wx.HORIZONTAL)
         page1.SetSizer(page1BoxSizer)
         self.panel1 = wx.Panel(page1,wx.ID_ANY,size = wx.Size(360,640))
+
         self.panel1.SetBackgroundColour("#aaaa00")
         
-        img = wx.Image('..\\pic\\阳光小秒拍.png'.decode('utf-8'),wx.BITMAP_TYPE_PNG,-1)
+        img = wx.Image('..\\pic\\startPage.png'.decode('utf-8'),wx.BITMAP_TYPE_PNG,-1)
         self.height = img.GetHeight()
         self.width = img.GetWidth()
         img.Rescale(self.width/2,self.height/2)
@@ -155,7 +171,7 @@ device = MonkeyRunner.waitForConnection()\n\n'''
         #连接面板添加布局
         panel2Page1 = TabPage.TabPage(nb)
 #         panel2Page1.SetBackgroundColour("#ff0000")
-        buttonCon = wx.Button(panel2Page1,wx.ID_ANY,u'连接手机',(5,5),wx.Size(70,25))
+        buttonCon = wx.Button(panel2Page1,wx.ID_ANY,u'连接设备',(5,5),wx.Size(70,25))
         frame.Bind(wx.EVT_BUTTON,lambda evt, mark=0 : self.startConnect(frame, buttonCon, img, self.width, self.height, bitmap, backgroundImage, self.panel1,panel2Txt1),buttonCon)
         buttonDisCon = wx.Button(panel2Page1,wx.ID_ANY,u'中断连接',(80,5),wx.Size(70,25))
         frame.Bind(wx.EVT_BUTTON,lambda evt, mark=0 : self.endConnect(buttonCon, self.connectThread),buttonDisCon)
@@ -165,7 +181,7 @@ device = MonkeyRunner.waitForConnection()\n\n'''
         
         panel2panel0 = wx.Panel(panel2Page1,wx.ID_ANY,(5,35),wx.Size(145,80),wx.BORDER_SIMPLE | wx.TE_MULTILINE )
 #         panel2panel0.SetBackgroundColour("#ff0000")
-        panel2Txt1 = wx.TextCtrl(panel2panel0,wx.ID_ANY,u"phone:sanxing\nwidth:720\nheight:1280",(0,0),wx.Size(145,80),wx.TE_MULTILINE | wx.TE_NO_VSCROLL)
+        panel2Txt1 = wx.TextCtrl(panel2panel0,wx.ID_ANY,u"device:Android\nwidth:720\nheight:1280",(0,0),wx.Size(145,80),wx.TE_MULTILINE | wx.TE_NO_VSCROLL)
         panel2Txt1.SetEditable(False)      
         radioClickBut = wx.RadioButton(panel2Page1,wx.ID_ANY,u'点击',(190,10),style = wx.RB_GROUP)
         radioDragBut = wx.RadioButton(panel2Page1,wx.ID_ANY,u'拖曳',(190,30))       
@@ -222,7 +238,7 @@ device = MonkeyRunner.waitForConnection()\n\n'''
         wx.StaticText(panel2Page1,wx.ID_ANY,u'秒',pos = (390,200))
         wx.StaticText(panel2Page1,wx.ID_ANY,u'秒',pos = (390,220))
         manShotBut = wx.Button(panel2Page1,wx.ID_ANY,u'添加截图',(420,215),wx.Size(65,25))
-        self.screenshotPath = wx.TextCtrl(panel2Page1,wx.ID_ANY,'D:\\screenshot',(110,248),(300,20))
+        self.screenshotPath = wx.TextCtrl(panel2Page1,wx.ID_ANY,'C:\\screenshot',(110,248),(300,20))
         self.screenshotPath.SetEditable(False)
         selectPathBut = wx.Button(panel2Page1,wx.ID_ANY,u'截图路径',(420,245),wx.Size(65,25))
         self.radioAutoShotBut.Bind(wx.EVT_RADIOBUTTON,self.changeScreenShotTypeEVT)
@@ -276,14 +292,14 @@ device = MonkeyRunner.waitForConnection()\n\n'''
         judge = os.popen('adb devices').readlines()
         if len(judge) == 3:
             buttonCon.Enable(False)
-            path = 'D:\\screenshot\\'
+            path = 'C:\\screenshot\\'
             filename = 'monkeyPic'
             if os.path.exists(path):
                 print 'path is exit'
             else:
                 print'creat the path'
-                os.makedirs('D:\\screenshot\\')
-            file = open('D:\\screenshot\\ctrl.txt','w')
+                os.makedirs('C:\\screenshot\\')
+            file = open('C:\\screenshot\\ctrl.txt','w')
             file.write('0')
             file.close()
             monkeyrunnerThread = StartMonkeyService.StartMonkeyService()
@@ -291,19 +307,19 @@ device = MonkeyRunner.waitForConnection()\n\n'''
             
             self.connectThread = ShowScreenService.ShowScreenService(img,height,width,bitmap,backgroundImage,panel1,panel2Txt1,self.screenRate,self.freshRate)
             
-            while not os.path.exists('D:\\screenshot\\infoCtrl.txt'):
+            while not os.path.exists('C:\\screenshot\\infoCtrl.txt'):
                 pass           
             
             flag = 0
             while  flag != 1:
-                file2 = open('D:\\screenshot\\infoCtrl.txt','r')
+                file2 = open('C:\\screenshot\\infoCtrl.txt','r')
                 if file2.read() == '1':
                     flag = 1
                 file2.close()
 
             self.connectThread.start()
             
-            file2 = open('D:\\screenshot\\infoCtrl.txt','w')
+            file2 = open('C:\\screenshot\\infoCtrl.txt','w')
             file2.write('0')
             file2.close()            
             
@@ -676,7 +692,7 @@ device = MonkeyRunner.waitForConnection()\n\n'''
             self.scriptArea.SetValue('')
             
     def showVersionEVT(self,event):
-        dialog = wx.MessageDialog(self.frame,u"Androd自动化脚本录制工具\n版本：V1.0.0\n.......\n炫一下测试部",'',wx.YES_DEFAULT)
+        dialog = wx.MessageDialog(self.frame,u"视易Android机顶盒录制工具\n版本：V1.0.0\n\n\t\t测试部",'',wx.YES_DEFAULT)
         dialog.ShowModal()
         
     def cancleRerecordEVT(self,event):
@@ -707,4 +723,4 @@ device = MonkeyRunner.waitForConnection()\n\n'''
     def addDosCodeIndex(self):
         self.dosCodeIndex += 1
         
-MyClass("").show();
+MonkeyrunnerTools("").show();

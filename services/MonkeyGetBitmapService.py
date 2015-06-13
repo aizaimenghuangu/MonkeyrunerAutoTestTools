@@ -12,55 +12,59 @@ class MonkeyGetBitmapService(threading.Thread):
         self.ctrl = 0
         print 'start monkeyrunner'
         try:
+            print 'MonkeyRunner.waitForConnection()'
             self.device = MonkeyRunner.waitForConnection()
+            print 'end MonkeyRunner.waitForConnection()'
             name = self.device.getProperty('build.model')
+
             width = self.device.getProperty('display.width')
+
             height = self.device.getProperty('display.height')
             
             self.info = {"namme":name,"width":width,"height":height}
-            print self.info
+#            print self.info
             
             
-            self.path = 'D:\\screenshot\\'
+            self.path = 'C:\\screenshot\\'
             self.filename = 'monkeyPic'
             if os.path.exists(self.path):
                 print 'path is exit'
             else:
                 print'creat the path'
-                os.makedirs('D:\\screenshot\\')
+                os.makedirs('C:\\screenshot\\')
                 
-#             file1 = open('D:\\screenshot\\info.txt','w')        
+#             file1 = open('C:\\screenshot\\info.txt','w')        
 #             file1.write(self.info)
 #             file1.close()
 
-            file2 = open('D:\\screenshot\\infoCtrl.txt','w')
+            file2 = open('C:\\screenshot\\infoCtrl.txt','w')
             file2.write('0')
             file2.close()
 
-            file1 = open('D:\\screenshot\\info.txt','w')
+            file1 = open('C:\\screenshot\\info.txt','w')
             file1.write(name + '\n')
             file1.write(width + '\n')
             file1.write(height + '\n')
             file1.close()
             
-            file2 = open('D:\\screenshot\\infoCtrl.txt','w')
+            file2 = open('C:\\screenshot\\infoCtrl.txt','w')
             file2.write('1')
             file2.close()
             
-        except:
-            print 'fail to connect the androidPhone'
+        except Exception,e:
+            print Exception,":",e
 
 
     def run(self):
         self.ctrl = 1
         while self.ctrl == 1:
-            file = open('D:\\screenshot\\ctrl.txt','w')
+            file = open('C:\\screenshot\\ctrl.txt','w')
             file.write('0')
 #             print '0'
             file.close()
             result = self.device.takeSnapshot()
             result.writeToFile (self.path + self.filename + '.png', 'png')
-            file = open('D:\\screenshot\\ctrl.txt','w')
+            file = open('C:\\screenshot\\ctrl.txt','w')
             file.write('1')
             file.close()
 #             print '1'
