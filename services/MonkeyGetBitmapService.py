@@ -12,17 +12,19 @@ class MonkeyGetBitmapService(threading.Thread):
         self.ctrl = 0
         print 'start monkeyrunner'
         try:
-            print 'MonkeyRunner.waitForConnection()'
+            #print 'MonkeyRunner.waitForConnection()'
             self.device = MonkeyRunner.waitForConnection()
-            print 'end MonkeyRunner.waitForConnection()'
-            name = self.device.getProperty('build.model')
-
-            width = self.device.getProperty('display.width')
-
-            height = self.device.getProperty('display.height')
             
-            self.info = {"namme":name,"width":width,"height":height}
-#            print self.info
+            try:
+                name = self.device.getProperty('build.model')
+                width = self.device.getProperty('display.width')
+                height = self.device.getProperty('display.height')
+            except Exception, e:
+                raise e
+
+            
+            self.info = {"name":name,"width":width,"height":height}
+            print self.info
             
             
             self.path = 'C:\\screenshot\\'

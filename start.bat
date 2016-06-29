@@ -1,2 +1,4 @@
 @echo off
-pythonw ./ui/Main.pyw
+call "ui\Main.pyw"
+
+pause

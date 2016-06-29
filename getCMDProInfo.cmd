@@ -1,1 +1,0 @@
-tasklist | find "cmd.exe" | find /v "hk"

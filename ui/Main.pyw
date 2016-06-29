@@ -38,7 +38,7 @@ class MonkeyrunnerTools(object):
     def __init__(self, params):
         #定义窗体尺寸
         #self.winSize = wx.Size(900,730)
-        self.winSize = wx.Size(1280,720)
+        self.winSize = wx.Size(1190,720)
         #刷新率默认为0.05秒每次
         self.freshRate = 0.05
         #动态显示手机屏幕的线程
@@ -330,7 +330,7 @@ device = MonkeyRunner.waitForConnection()\n\n'''
     #断开与手机的连接，并结束相关线程
     def endConnect(self,buttonCon,connectThread):
         buttonCon.Enable(True)
-        cmd = '..\\getProId'
+        cmd = '..\\stopMonkeyrunner.cmd'
         os.system(cmd)
         self.connectThread.stop()
     

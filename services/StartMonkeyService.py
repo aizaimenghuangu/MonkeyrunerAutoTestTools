@@ -11,7 +11,9 @@ class StartMonkeyService(threading.Thread):
         threading.Thread.__init__(self)
 
     def run(self):
-        cmd = 'monkeyrunner ' + os.getcwd()
+
+        #add 'chcp 437' to fix:unknown encoding 'ms936' 
+        cmd = 'chcp 437 && monkeyrunner ' + os.getcwd()
 
         sysstr = platform.system()
         if (sysstr == "Windows"):
