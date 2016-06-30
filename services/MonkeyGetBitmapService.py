@@ -12,21 +12,26 @@ class MonkeyGetBitmapService(threading.Thread):
         self.ctrl = 0
         print 'start monkeyrunner'
         try:
-            #print 'MonkeyRunner.waitForConnection()'
             self.device = MonkeyRunner.waitForConnection()
-            
-            try:
-                name = self.device.getProperty('build.model')
-                width = self.device.getProperty('display.width')
-                height = self.device.getProperty('display.height')
-            except Exception, e:
-                raise e
 
-            
+            name = self.device.getProperty('build.model')
+            width = self.device.getProperty('display.width')
+            height = self.device.getProperty('display.height')
+
+           	#临时解决方案，经过验证Unable to get variable: display.width 并不是waitForConnection()连接失败导致,这里针对机顶盒提供默认值
+            if name is None:
+            	name = 'N10'
+
+            if width is None:
+            	width = '1280'
+
+            if height is None:
+            	height = '720'
+
             self.info = {"name":name,"width":width,"height":height}
             print self.info
-            
-            
+
+
             self.path = 'C:\\screenshot\\'
             self.filename = 'monkeyPic'
             if os.path.exists(self.path):
@@ -34,7 +39,7 @@ class MonkeyGetBitmapService(threading.Thread):
             else:
                 print'creat the path'
                 os.makedirs('C:\\screenshot\\')
-                
+
 #             file1 = open('C:\\screenshot\\info.txt','w')        
 #             file1.write(self.info)
 #             file1.close()
@@ -48,11 +53,11 @@ class MonkeyGetBitmapService(threading.Thread):
             file1.write(width + '\n')
             file1.write(height + '\n')
             file1.close()
-            
+
             file2 = open('C:\\screenshot\\infoCtrl.txt','w')
             file2.write('1')
             file2.close()
-            
+
         except Exception,e:
             print Exception,":",e
 
