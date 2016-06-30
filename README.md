@@ -8,6 +8,7 @@ Android自动测试脚本录制工具
  [源码地址](https://github.com/aizaimenghuangu/MonkeyrunerAutoTestTools)
 
  [Python2.7.10下载](https://www.python.org/downloads/release/python-2710/)
+ 
 [Wxpython下载](http://www.wxpython.org/download.php#msw)
 
 **简介**：目前支持adb控制脚本的录制，monkeyrunner脚本的录制，支持点击、长按、拖动、输入、删除、home键，返回键、菜单键、长按Home键、音量+、音量-的操作；注意:长按操作需要android4.4的系统支持（录制时长按在程序中无效，但录制的monkeyrunner脚本可以正常运行）；
