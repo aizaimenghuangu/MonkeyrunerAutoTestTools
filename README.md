@@ -1,9 +1,9 @@
 # MonkeyrunerAutoTestTools
 Android自动测试脚本录制工具
 运行环境：
-1、Windows系统 
-2、配置好python和微信wxpython的运行环境
-3、配置好adb和monkeyrunner的运行路径
+- Windows系统 
+- 配置好python和微信wxpython的运行环境
+- 配置好adb和monkeyrunner的运行路径
 
 源码地址：https://github.com/liyuanhong/MonkeyrunerAutoTestTools
 
