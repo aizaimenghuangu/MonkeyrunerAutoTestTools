@@ -19,3 +19,8 @@ Android自动测试脚本录制工具
 :![][image-1] 
 
 [image-1]:	res/startPage.png
+
+//TODO:
+- [MainThread] [com.android.chimpchat.adb.AdbChimpDevice] Unable to get variable: display.width
+- [MainThread] [com.android.chimpchat.adb.AdbChimpDevice] Unable to get variable: display.height
+- 新建3个分支：分别对应机顶盒、管理系统、手机端
